@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>双飞翼布局</title>
+	<link rel="stylesheet" type="text/css" href="./style/sanlan.css">
+</head>
+<body>
+	<div class="wrapper">
+		<div class="middle">
+			<div class="main">
+				<p>我叫zrd，是一个南京邮电大学的大二学生，希望以后可以从事前端工作，没啥爱好，只喜欢玩游戏，下面介绍一款我比较喜欢的游戏。</p>
+				<p>《彩虹六号：围攻》是由育碧蒙特利尔工作室专为新一代游戏主机研发的一款反恐题材射击游戏，属于《彩虹六号》系列。该作灵感来源于现实世界中的反恐行动，玩家将在游戏中将扮演警察或匪徒进行殊死较量。游戏内的各个人物来自世界各国的反恐部队，他们在游戏里集合在一起是要面对共同的敌人。每一个队员的特性刻画的十分清晰，不同人物使用不同的技能，不同技能搭配不同的物品，以及每个人物单独使用的枪械让每个角色活灵活现的呈现给了玩家。
+				玩家将扮演警察或匪徒进行一场人性的考验，进行5v5的对决，情节异常紧张，每个举动都影响人质是否能安全被救出。(百度百科)</p>
+				<img src="./image/timg.jpg">
+			</div>
+		</div>
+		<div class="left">
+			<img src="./image/task_1_01.jpg">
+			<p>zrd</p>
+		</div>
+		<div class="right">
+			<img src="./image/task_1_01.jpg">
+			<img src="./image/task_1_01.jpg">
+			<img src="./image/task_1_01.jpg">
+			<img src="./image/task_1_01.jpg">
+		</div>
+	</div>
+</body>
+</html>
