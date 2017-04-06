@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		li{
+			list-style: none;
+			width: 50px;
+			background: red;
+			display: inline-block;
+			margin-right: 20px;
+			text-align: center;
+			vertical-align: bottom;
+			font-size: 10px;
+		}
+	</style>
+</head>
+<body>
+	 <input type="text" name="text">
+	 <button type="button" value="左侧入" onclick="leftIn()">左侧入</button>
+	 <button type="button" value="右侧入" onclick="rightIn()">右侧入</button>
+	 <button type="button" value="左侧出" onclick="leftOut()">左侧出</button>
+	 <button type="button" value="右侧出" onclick="rightOut()">右侧出</button>
+	 <button type="button" value="排序" onclick="bubbleSort()">排序</button>
+	 <ul id="ul-list">
+	 	
+	 </ul>
+	 <script type="text/javascript">
+	 var ul = document.getElementById('ul-list');
+	 var txt = document.getElementsByTagName('input')[0];
+	 var li = document.getElementsByTagName('li');
+	 	/*
+	 	* 右侧入
+	 	*/
+	 	function rightIn(){
+	 		var liHTML = testNum(txt.value);
+	 		if(liHTML === undefined){
+	 			txt.value=null;
+	 			return;
+	 		}else{
+	 			if(testLi()){
+	 				txt.value=null;
+	 				alert('已超过最大容量');
+	 				return;
+	 			}
+	 			ul.appendChild(liHTML);
+	 		}
+	 		txt.value=null;
+	 	}
+	 	/*
+	 	* 左侧入
+	 	*/
+	 	function leftIn(){
+	 		var liHTML = testNum(txt.value);
+	 		if(liHTML === undefined){
+	 			txt.value=null;
+	 			return;
+	 		}else{
+	 			if(testLi()){
+	 				txt.value=null;
+	 				alert('已超过最大容量');
+	 				return;
+	 			}
+	 			ul.insertBefore(liHTML,ul.firstChild);
+	 		}
+	 		txt.value=null;
+	 	}
+	 	/*
+	 	* 右侧出
+	 	*/
+	 	function rightOut(){
+	 		if(ul.children.length == 0){
+	 			alert('列表为空');
+	 			return;
+	 		}
+	 		alert(ul.lastChild.innerHTML);
+	 		ul.removeChild(ul.lastChild);
+	 	}
+	 	/*
+	 	* 左侧出
+	 	*/
+	 	function leftOut(){
+	 		if(ul.children.length == 0){
+	 			alert('列表为空');
+	 			return;
+	 		}
+	 		alert(ul.firstChild.innerHTML);
+	 		ul.removeChild(ul.firstChild);
+	 	}
+	 	/*
+	 	* 检测数字合法性并给li赋值
+	 	*/
+	 	function testNum(value){
+	 		if(!(/^[0-9]{1,2}|100$/g.test(value))){
+	 			alert('请输入合法数字');
+	 		}else{
+	 			var li = document.createElement('li');
+	 			li.innerHTML = value;
+	 			li.style.height = value + 'px';
+	 			return li;
+	 		}
+	 	}
+	 	/*
+	 	* 当点击某个li时消除那个li
+	 	*/
+	 	ul.onmouseover = function(){
+	 		for(var i = 0;i < li.length;i++){
+	 			li[i].onclick = function(){
+	 				ul.removeChild(this);
+	 			}
+	 		}
+	 	};
+	 	/*
+	 	* 判断li是否超过60个
+	 	*/
+	 	function testLi() {
+	 		if(li.length >= 60){
+	 			return true;
+	 		}
+	 	}
+	 	/*
+	 	* 排序li
+	 	*/
+	 	function bubbleSort(){
+	 		for(var i = 0;i < li.length-1;i++){
+	 			for(var j = 0;j < li.length-i-1;j++){
+	 				if(parseInt(li[j].innerHTML) > parseInt(li[j+1].innerHTML)){
+	 					swap(j,j+1);
+	 				}
+	 			}		
+	 		}
+	 	}
+	 	function swap(beforeIndex,afterIndex){
+	 		var item = li[beforeIndex].innerHTML;
+	 		li[beforeIndex].innerHTML = li[afterIndex].innerHTML;
+	 		li[afterIndex].innerHTML = item;
+	 		li[beforeIndex].style.height = parseInt(li[beforeIndex].innerHTML) + 'px';
+	 		li[afterIndex].style.height = parseInt(li[afterIndex].innerHTML) + 'px';
+	 	}
+
+	 </script>
+</body>
+</html>
