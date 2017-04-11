@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		div{
+			border: 1px solid;
+			background: white;      //若不加，子div默认和父div一个颜色，当changeColor执行时会出问题
+		}
+		#root{
+			display: flex;
+			justify-content: space-around;
+			align-items: center;			
+			width: 1000px;
+			height: 400px;
+		}
+		.flex1{
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			width: 450px;
+			height: 360px;
+		}
+		.flex2{
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			width: 175px;
+			height: 320px;
+		}
+		.flex2>div{
+			width:37px;
+			height: 280px; 
+		}
+	</style>
+</head>
+<body>
+	<button type="button">先序遍历</button>
+	<button type="button">中序遍历</button>
+	<button type="button">后序遍历</button>
+	<div id="root">
+		<div class="flex1">
+			<div class="flex2">
+				<div></div>
+				<div></div>
+			</div>
+			<div class="flex2">
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+		<div class="flex1">
+			<div class="flex2">
+				<div></div>
+				<div></div>
+			</div>
+			<div class="flex2">
+				<div></div>
+				<div></div>
+			</div>			
+		</div>
+	</div>
+	<script type="text/javascript">
+        var root = document.getElementById('root');
+        var btn = document.getElementsByTagName('button');
+        var stack = [],
+            timer,
+            item = 0;
+
+		/*
+        * 先序遍历
+        */
+        function preOrder(bt){
+        	if(bt){
+        		stack.push(bt);
+        		preOrder(bt.firstElementChild);
+        		preOrder(bt.lastElementChild);
+        	}
+        }
+
+        /*
+        * 中序遍历
+        */
+        function inOrder(bt){
+        	if(bt){
+        		inOrder(bt.firstElementChild);
+        		stack.push(bt);
+        		inOrder(bt.lastElementChild);
+        	}
+        }
+
+         /*
+        * 后序遍历
+        */
+        function postOrder(bt){
+        	if(bt){
+        		postOrder(bt.firstElementChild);
+        		postOrder(bt.lastElementChild);
+        		stack.push(bt);
+        	}
+        }     
+ 
+        /*
+        * 通过遍历函数将div按顺序填入数组中然后再挨个显示
+        */
+        function changeColor(){
+        	stack[item].style.backgroundColor = 'blue';
+        	timer = setInterval(function(){
+        		if(item !== stack.length - 1){
+        			stack[item].style.backgroundColor = 'white';
+        			stack[item+1].style.backgroundColor = 'blue';
+        			item++;
+        		}else{
+        			stack[item].style.backgroundColor = 'blue';
+        			stack[item].style.backgroundColor = 'white';
+        			clearInterval(timer);
+        			item = 0;                                     //第二次按按钮数组从0开始循环
+        		}
+        	},1000);
+        }
+
+        window.onload = function(){
+        	btn[0].onclick = function(){
+        		if(item > 0){
+        			alert('正在遍历中...');
+        			return;                                       //退出再次激活的函数
+        		}
+        		stack = [];                                       //重置数组
+        		preOrder(root);
+        		changeColor();
+        	};
+        	btn[1].onclick = function(){
+        		if(item > 0){
+        			alert('正在遍历中...');
+        			return;                               
+        		}
+        		stack = [];
+        		inOrder(root);
+        		changeColor();
+        	};
+        	btn[2].onclick = function(){
+        		if(item > 0){
+        			alert('正在遍历中...');
+        			return;                                      
+        		}
+        		stack = [];
+        		postOrder(root);
+        		changeColor();
+        	};
+        }
+	</script>
+</body>
+</html>
