@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		div {
+			float: left;
+			padding: 20px;
+			margin: 10px;
+			border: 1px solid #000;
+			background-color: #fff;
+			color: #000;
+		}
+	</style>
+</head>
+<body>
+	<button type="button">深度优先遍历</button>
+	<button type="button">广度优先遍历</button>
+	<button type="button">深度优先查询</button>
+	<button type="button">广度优先查询</button>
+	<input type="text" name="text">
+	<div id="root">root
+		<div class="animal">animal
+			<div class="cat">cat1
+				<div class="little">little1</div>
+				<div class="little">little2</div>
+				<div class="little">little3</div>
+			</div>
+			<div class="cat">cat2</div>
+			<div class="cat">cat3
+				<div class="little">little4</div>
+				<div class="little">little5</div>
+			</div>
+		</div>
+		<div class="transform">transform
+			<div class="dog">dog1
+				<div class="little">little6</div>
+			</div>
+			<div class="dog">dog2
+				<div class="little">little7</div>
+			</div>
+		</div>
+		<div class="kong">kong</div>
+	</div>
+	<script type="text/javascript">
+		var stack = [],
+			rstack = [],
+			item = 0,
+			lock = false,
+			root = document.getElementById('root'),
+			btn = document.getElementsByTagName('button');
+
+		window.onload = function(){
+			btn[0].onclick = function(){
+        		if(lock){
+        			alert('正在遍历中...');
+        			return;                                       //退出再次激活的函数
+        		}
+        		reset();
+        		shendu(root);
+        		changeColor(); 
+			}
+			btn[1].onclick = function(){
+        		if(lock){
+        			alert('正在遍历中...');
+        			return;                                       //退出再次激活的函数
+        		}
+        		reset();
+        		guangdu(root);
+        		changeColor(); 
+			}
+			btn[2].onclick = function(){
+				var value = document.getElementsByTagName('input')[0].value;
+        		if(lock){
+        			alert('正在查询中...');
+        			return;                                       //退出再次激活的函数
+        		}
+        		reset();
+        		shendu(root);
+				changeColor(value);
+				item=0;
+			}
+			btn[3].onclick = function(){
+				var value = document.getElementsByTagName('input')[0].value;
+        		if(lock){
+        			alert('正在查询中...');
+        			return;                                       //退出再次激活的函数
+        		}
+        		reset();
+        		guangdu(root);
+				changeColor(value);
+			}
+		}
+		/*
+		* 广度优先非递归遍历
+		*/
+		function guangdu(node){
+			if(node){
+				stack.push(node);
+			}
+			while(stack.length){
+				var it = stack.shift();
+				rstack.push(it);
+				if(it.children.length > 0){
+					stack = stack.concat(Array.prototype.slice.call(it.children));  //将类数组转化为数组，否则加入stack中的是HTMLCollection集合的一个整体，只能算一个数组元素
+				}
+			}
+		}
+
+		/*
+		* 深度优先非递归遍历
+		*/
+		function shendu(node){
+			if(node){
+				stack.push(node);
+			}
+			while(stack.length){
+				var it = stack.shift();
+				rstack.push(it);
+				if(it.children.length > 0){
+					stack = Array.prototype.slice.call(it.children).concat(stack);       //将类数组转化为数组才能使用concat
+				}
+			}
+		}
+
+        /*
+        * 通过遍历函数将div按顺序填入数组中然后再挨个显示,传入参数后变为查询
+        */
+        function changeColor(value){
+        	lock = true;
+        	rstack[item].style.backgroundColor = 'blue';
+        	if(value == rstack[item].firstChild.nodeValue.trim()){
+        		rstack[item].style.backgroundColor = 'red';
+        		lock = false;
+        		return;
+        	}
+        	timer = setInterval(function(){
+        		if(item !== rstack.length - 1){
+        			rstack[item].style.backgroundColor = 'white';
+        			rstack[item+1].style.backgroundColor = 'blue';
+            		if(value == rstack[item+1].firstChild.nodeValue.trim()){
+        				rstack[item+1].style.backgroundColor = 'red';
+        				lock = false;
+        				clearInterval(timer);
+        			}       			
+        			item++;
+        		}else{
+        			rstack[item].style.backgroundColor = 'blue';
+            		if(value == rstack[item].firstChild.nodeValue.trim()){
+        				rstack[item].style.backgroundColor = 'red';
+        				lock = false;
+        				clearInterval(timer);
+        			} 
+        			rstack[item].style.backgroundColor = 'white';
+        			lock = false;
+        			clearInterval(timer);
+        			item = 0;                                     //第二次按按钮数组从0开始循环
+        		}
+        	},500);
+        }
+
+        /*
+        * 重置函数
+        */
+        function reset(){
+        	for(var i = 0;i < rstack.length;i++){
+        		rstack[i].style.backgroundColor = 'white';
+        	}
+        	item = 0;
+        	rstack = [];
+        }		
+	</script>
+</body>
+</html>
