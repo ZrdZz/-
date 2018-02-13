@@ -151,6 +151,29 @@ BinarySearchTree.prototype.postOrderTraverse = function(func){
 //     }
 // }
 
+//层次遍历
+BinarySearchTree.prototype.levelOrderTraverse = function(func){
+	var root = this.root;
+	if(root === null){
+		return null
+	}
+	var queue = [],
+		queue.push(root);
+
+	while(queue.length > 0){
+		var node = queue.shift();
+		func(node.value);
+
+		if(node.left){
+			queue.push(node.left);
+		}
+		if(node.right){
+			queue.push(node.right);
+		}
+	}
+
+}
+
 var tree = new BinarySearchTree();
 tree.insert(10);
 tree.insert(6);
@@ -159,4 +182,4 @@ tree.insert(4);
 tree.insert(7);
 tree.insert(11);
 tree.insert(17);
-console.log(tree)
+console.log(tree.levelOrderTraverse(function(value){console.log(value)}))
