@@ -34,6 +34,7 @@ function bubbleSort(arr){
 
 //快速排序
 //选择一个基准,和基准比较将数据分为两部分,然后分别递归调用
+//最坏情况: O(n^2), 最好情况：O(nlogn), 平均时间复杂度: O(nlogn); 空间复杂度:O(logn)
 function quickSort(arr){
 	if(arr.length <= 1){
 		return arr;
@@ -69,6 +70,39 @@ function selectionSort(arr){
 		arr[minIndex] = temp;
 	}
 	return arr
+}
+
+//归并排序
+//性能不受输入数据的影响,表现比选择排序好一些,但需要额外的内存空间
+//不断地等分序列直至长度为1,然后比较合并
+//最坏情况: O(nlogn), 最好情况：O(nlogn), 平均时间复杂度: O(nlogn); 空间复杂度:O(n)
+function mergeSort(arr){
+	if(arr.length < 2){
+		return arr;
+	}
+
+	var middle = Math.floor(arr.length / 2),
+		left = arr.slice(0, middle),
+		right = arr.slice(middle);
+
+	return merge(mergeSort(left), mergeSort(right))
+}
+function merge(left, right){
+	var result = [];
+	while(left.length > 0 && right.length > 0){
+		if(left[0] > right[0]){
+			result.push(right.shift());
+		}else{
+			result.push(left.shift());
+		}
+	}
+	while(right.length > 0){
+		result.push(right.shift());
+	}
+	while(left.length > 0){
+		result.push(left.shift())
+	}
+	return result
 }
 
 //插入排序
@@ -114,6 +148,7 @@ function insertionSort(arr){
 //在插入排序中,对几乎排好序的数组效率很高,希尔排序就是先使数组基本有序再使用插入排序
 //在数组中采用跳跃式分组,然后分组进行插入排序,然后逐步缩小增量,继续分组进行插入排序,直至增量为1
 //这样使整个数组达到基本有序,到增量为1时,只需做一些微调
+//最坏情况: O(nlog^2n), 最好情况：O(nlog^2n), 平均时间复杂度: O(nlogn); 空间复杂度:O(1)
 function shellSort(arr) {
     var len = arr.length,
         temp,
