@@ -149,7 +149,7 @@ function insertionSort(arr){
 //在数组中采用跳跃式分组,然后分组进行插入排序,然后逐步缩小增量,继续分组进行插入排序,直至增量为1
 //这样使整个数组达到基本有序,到增量为1时,只需做一些微调
 //最坏情况: O(nlog^2n), 最好情况：O(nlog^2n), 平均时间复杂度: O(nlogn); 空间复杂度:O(1)
-function shellSort(arr) {
+function shellSort(arr){
     var len = arr.length,
         temp,
         gap = 1;
@@ -169,4 +169,31 @@ function shellSort(arr) {
         }
     }
     return arr;
+}
+
+//计数排序
+//最坏情况: O(n + k), 最好情况：O(n + k), 平均时间复杂度: O(n + k); 空间复杂度:O(k)
+function countingSort(arr){
+    var count = [],
+        result = [],
+        min = arr[0], 
+        max = arr[0];
+    
+    //以原数组每个元素的值作为新数组的下标, 新数组的值为对应下标出现的次数
+    for(let i = 0; i < arr.length; i++){
+        min = min > arr[i] ? arr[i] : min;
+        max = max < arr[i] ? arr[i] : max;
+        count[arr[i]] = count[arr[i]] ? count[arr[i]] + 1 : 1;
+    }
+
+    //将新数组各值出现的次数累加, 这样每个元素对应在排序后数组的位置就确定了
+    for(let j = min; j < max; j++){
+        count[j + 1] = (count[j + 1] || 0) + (count[j] || 0); 
+    }
+
+    for(let k = arr.length - 1; k >= 0; k--){
+        result[count[arr[k]] - 1] = arr[k];
+        count[arr[k]]--;
+    }
+    return result
 }
