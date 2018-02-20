@@ -197,3 +197,41 @@ function countingSort(arr){
     }
     return result
 }
+
+//桶排序
+//最坏情况: O(n + k), 最好情况：O(n + k), 平均时间复杂度: O(n^2); 空间复杂度:O(n + k)
+function bucketSort(arr, bucketNum){
+    var min = arr[0],
+        max = arr[0],
+        buckets = [],
+        result = [];
+    bucketNum = bucketNum || 5;
+    for(let i = 1; i < arr.length; i++){
+        min = min > arr[i] ? arr[i] : min;
+        max = max < arr[i] ? arr[i] : max;
+    }
+    //每个桶的范围
+    var space = (max - min + 1) / bucketNum;
+
+    for(let i = 0; i < arr.length; i++){
+        var index  = Math.floor((arr[i] - min) / space);
+        //若桶里有数,则可以利用一种排序算法进行排序
+        if(buckets[index]){
+            var len = buckets[index].length - 1;
+            while(len >= 0 && buckets[index][len] > arr[i]){
+                buckets[index][len + 1] = buckets[index][len];
+                len--;
+            }
+            buckets[index][len + 1] = arr[i];
+        }else{
+            buckets[index] = [arr[i]];
+        }
+    }
+
+    for(let i = 0; i < bucketNum; i++){
+        if(buckets[i]){
+            result = result.concat(buckets[i]);
+        }
+    }
+    return result
+}
