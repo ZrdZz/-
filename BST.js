@@ -1,59 +1,203 @@
 //二叉搜索树左子树的所有节点值均小于根节点的值,右子树的所有节点值均大于根节点的值
 
-//节点定义
+/**
+ * 节点定义
+ * @param {*} value 节点值
+ */
 function Node(value){
 	this.value = value;
-	this.left = left;
-	this.right = right;
+	this.left = null;
+	this.right = null;
 }
 
-function BinarySearchTree(){
-	this.root = null;
+function BinarySearchTree(value){
+	this.root = new Node(value);
 } 
 
-BinarySearchTree.prototype.insert = function(value){
-	let newNode = new Node(value);
+BinarySearchTree.prototype = {
+	constructor: BinarySearchTree,
 
-	let _insertNode = function(node, newNode){
-		if(newNode.value < node.value){
-			if(node.left === null){
-				node.left = newNode;
-			}else{
-				_insertNode(node.left, newNode);
-			}
-		}else{
-			if(newNode.value > node.value){
-				if(node.right === null){
-					node.right = newNode;
+	/**
+	 * 插入节点
+	 * @param {*} value 节点值
+	 */
+	insert: function(value){
+		let newNode = new Node(value);
+	
+		let _insertNode = function(node, newNode){
+			if(newNode.value < node.value){
+				if(node.left === null){
+					node.left = newNode;
 				}else{
-					_insertNode(node.right, newNode);
-				}				
+					_insertNode(node.left, newNode);
+				}
+			}else{
+				if(newNode.value > node.value){
+					if(node.right === null){
+						node.right = newNode;
+					}else{
+						_insertNode(node.right, newNode);
+					}				
+				}
 			}
 		}
+	
+		insertNode(this.root, newNode);
+	},
+
+	/**
+	 * 查找最小值
+	 */
+	minNode: function(){
+		let node = this.root;
+		while(node.left){
+			node = node.left;
+		}
+		return node.value
+	},
+
+	/**
+	 * 查找最大值
+	 */
+	maxNode: function(){
+		let node = this.root;
+		while(node.right){
+			node = node.right;
+		}
+		return node.value
+	},
+
+	/**
+	 * 查找指定元素
+	 * @param {Node} node 开始查找的节点
+	 * @param {*} value 查找的节点值
+	 */
+	search: function(node, value){
+		if(node === null){
+			return null
+		}
+		if(value < node.value){
+			return this.search(node.left, value)
+		}else if(value > node.value){
+			return this.search(node.right, value)
+		}else{
+			return node
+		}
+	},
+
+	/**
+	 * 删除节点
+	 * @param {Node} node 开始查找的节点
+	 * @param {*} value 删除节点的值
+	 */
+	remove: function(node, value){
+		if(node === null){
+			return null
+		}
+		if(value < node.value){
+			node.left = this.remove(node.left, value);
+			return node
+		}else if(value > node.value){
+			node.right = this.remove(node.right, value);
+			return node
+		}else{
+			//删除节点没有子节点
+			if(node.left === null && node.right === null){
+				node = null;
+				return node
+			}
+			//删除节点有一个子节点
+			if(node.left === null){
+				node = node.right;
+				return node;
+			}
+			if(node.right === null){
+				node = node.left;
+				return node;
+			}
+			//删除节点有两个子节点, 此时删除后父节点应指向左子树的最大子节点或右子树的最小子节点
+			let minNode = node.right;
+			while(minNode.left){
+				minNode = minNode.left;
+			}
+			node.value = minNode.value;
+			node.right = this.remove(node.right, minNode.value);
+			return node
+		}
+	},
+
+	/**
+	 * 先序遍历
+	 */
+	preOrderTraverse: function(func){
+		function preOrderTraverseNode(node, func){
+			if(node !== null){
+				func(node.value);
+				preOrderTraverseNode(node.left, func);
+				preOrderTraverseNode(node.right, func);
+			}
+		}
+	
+		preOrderTraverseNode(this.root, func);
+	},
+
+	/**	
+	 * 中序遍历
+	 */
+	inOrderTraverse: function(func){
+		function inOrderTraverseNode(node, func){
+			if(node !== null){
+				inOrderTraverseNode(node.left, func);
+				func(node.value);
+				inOrderTraverseNode(node.right, func);
+			}
+		}
+	
+		inOrderTraverseNode(this.root, func);
+	},
+
+	/**	
+	 * 后序遍历
+	 */
+	postOrderTraverse: function(func){
+		function postOrderTraverseNode(node, func){
+			if(node !== null){
+				postOrderTraverseNode(node.left, func);
+				postOrderTraverseNode(node.right, func);
+				func(node.value);
+			}
+		}
+	
+		postOrderTraverseNode(this.root, func);
+	},
+
+	/**	
+	 * 层次遍历
+	 */
+	levelOrderTraverse: function(func){
+		var root = this.root;
+		if(root === null){
+			return null
+		}
+		var queue = [];
+		queue.push(root);
+	
+		while(queue.length > 0){
+			var node = queue.shift();
+			func(node.value);
+	
+			if(node.left){
+				queue.push(node.left);
+			}
+			if(node.right){
+				queue.push(node.right);
+			}
+		}	
 	}
-
-	if(this.root === null){
-		this.root = newNode;
-	}else{
-		_insertNode(this.root, newNode);
-	}
-}
-
-//先序遍历
-BinarySearchTree.prototype.preOrderTraverse = function(func){
-    function preOrderTraverseNode(node, func){
-        if(node !== null){
-            func(node.value);
-            preOrderTraverseNode(node.left, func);
-            preOrderTraverseNode(node.right, func);
-        }
-    }
-
-    preOrderTraverseNode(this.root, func);
 }
 
 //先序遍历循环实现
-// BinarySearchTree.prototype.preOrderTraverse = function(func){
+// preOrderTraverse: function(func){
 //     var stack = [],
 //         current = this.root;
 
@@ -72,21 +216,8 @@ BinarySearchTree.prototype.preOrderTraverse = function(func){
 //     }
 // }
 
-//中序遍历
-BinarySearchTree.prototype.inOrderTraverse = function(func){
-    function inOrderTraverseNode(node, func){
-        if(node !== null){
-            inOrderTraverseNode(node.left, func);
-            func(node.value);
-            inOrderTraverseNode(node.right, func);
-        }
-    }
-
-    inOrderTraverseNode(this.root, func);
-}
-
 //中序遍历循环实现
-// BinarySearchTree.prototype.inOrderTraverse = function(func){
+// inOrderTraverse: function(func){
 //     var stack = [],
 //         current = this.root;
 
@@ -110,22 +241,8 @@ BinarySearchTree.prototype.inOrderTraverse = function(func){
 //     }
 // }
 
-
-//后序遍历
-BinarySearchTree.prototype.postOrderTraverse = function(func){
-    function postOrderTraverseNode(node, func){
-        if(node !== null){
-            postOrderTraverseNode(node.left, func);
-            postOrderTraverseNode(node.right, func);
-            func(node.value);
-        }
-    }
-
-    postOrderTraverseNode(this.root, func);
-}
-
 //后序遍历循环实现
-// BinarySearchTree.prototype.postOrderTraverse = function(func){
+//postOrderTraverse: function(func){
 //     var stack = [],
 //         current = null, //指向栈顶节点
 //         pre = null;     //指向上一个输出的节点
@@ -151,25 +268,3 @@ BinarySearchTree.prototype.postOrderTraverse = function(func){
 //     }
 // }
 
-//层次遍历
-BinarySearchTree.prototype.levelOrderTraverse = function(func){
-	var root = this.root;
-	if(root === null){
-		return null
-	}
-	var queue = [];
-	queue.push(root);
-
-	while(queue.length > 0){
-		var node = queue.shift();
-		func(node.value);
-
-		if(node.left){
-			queue.push(node.left);
-		}
-		if(node.right){
-			queue.push(node.right);
-		}
-	}
-
-}
