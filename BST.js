@@ -42,7 +42,7 @@ BinarySearchTree.prototype = {
 			}
 		}
 	
-		insertNode(this.root, newNode);
+		_insertNode(this.root, newNode);
 	},
 
 	/**
